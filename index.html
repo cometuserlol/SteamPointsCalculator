@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Points Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1c1c1c;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        input[type="number"] {
+            padding: 10px;
+            width: 80%; /* Set to 80% to center it nicely */
+            margin: 10px auto; /* Auto for horizontal centering */
+            border-radius: 5px;
+            border: none;
+            display: block; /* Makes the inputs take up their own line */
+            outline: none;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 85%; /* Align the button width with the inputs */
+            margin: 10px auto;
+            display: block;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Steam Points Calculator</h1>
+    <p>Enter your current points and target points to calculate how much you need to spend.</p>
+    <input type="number" id="currentPoints" placeholder="Enter your current points" min="0">
+    <input type="number" id="targetPoints" placeholder="Enter your target points" min="0">
+    <button onclick="calculate()">Calculate</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function calculate() {
+        const currentPoints = document.getElementById('currentPoints').value;
+        const targetPoints = document.getElementById('targetPoints').value;
+
+        if (currentPoints === "" || targetPoints === "" || currentPoints < 0 || targetPoints < 0 || isNaN(currentPoints) || isNaN(targetPoints)) {
+            document.getElementById('result').innerHTML = "<p>Please enter valid numbers for both fields.</p>";
+            return;
+        }
+
+        const pointsNeeded = targetPoints - currentPoints;
+
+        if (pointsNeeded <= 0) {
+            document.getElementById('result').innerHTML = "<p>You already have enough points!</p>";
+        } else {
+            let dollarsNeeded = pointsNeeded / 100;
+
+            if (dollarsNeeded < 1) {
+                // Use Math.ceil to round up to the next whole dollar
+                dollarsNeeded = Math.ceil(dollarsNeeded);
+                document.getElementById('result').innerHTML = `<p>You need to spend $${dollarsNeeded} to reach your target of ${targetPoints} points.</p>`;
+            } else {
+                // Use Math.ceil to round up to the next whole dollar
+                dollarsNeeded = Math.ceil(dollarsNeeded);
+                document.getElementById('result').innerHTML = `<p>You need to spend $${dollarsNeeded} to reach your target of ${targetPoints} points.</p>`;
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
