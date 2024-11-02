@@ -26,12 +26,32 @@
         }
         input[type="number"] {
             padding: 10px;
-            width: 80%; /* Set to 80% to center it nicely */
-            margin: 10px auto; /* Auto for horizontal centering */
+            width: 80%;
+            margin: 10px auto;
             border-radius: 5px;
             border: none;
-            display: block; /* Makes the inputs take up their own line */
+            display: block;
             outline: none;
+        }
+        .points-per-dollar-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px auto;
+        }
+        #pointsPerDollar {
+            width: 65%; /* Keep it centered within the available space */
+            margin-right: 5px; /* Space between input and button */
+        }
+        .help-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+			width: 7%;
+            border: none;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
         }
         button {
             background-color: #4CAF50;
@@ -40,7 +60,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            width: 85%; /* Align the button width with the inputs */
+            width: 80%;
             margin: 10px auto;
             display: block;
         }
@@ -56,9 +76,15 @@
 
 <div class="container">
     <h1>Steam Points Calculator</h1>
-    <p>Enter your current points and target points to calculate how much you need to spend.</p>
+    <p>Enter your current points, target points, and points per dollar to calculate the needed spend.</p>
     <input type="number" id="currentPoints" placeholder="Enter your current points" min="0">
     <input type="number" id="targetPoints" placeholder="Enter your target points" min="0">
+    
+    <div class="points-per-dollar-container">
+        <input type="number" id="pointsPerDollar" placeholder="Enter points per dollar" min="1">
+        <button class="help-button" onclick="openHelp()">?</button>
+    </div>
+    
     <button onclick="calculate()">Calculate</button>
     <div class="result" id="result"></div>
 </div>
@@ -67,9 +93,12 @@
     function calculate() {
         const currentPoints = document.getElementById('currentPoints').value;
         const targetPoints = document.getElementById('targetPoints').value;
+        const pointsPerDollar = document.getElementById('pointsPerDollar').value;
 
-        if (currentPoints === "" || targetPoints === "" || currentPoints < 0 || targetPoints < 0 || isNaN(currentPoints) || isNaN(targetPoints)) {
-            document.getElementById('result').innerHTML = "<p>Please enter valid numbers for both fields.</p>";
+        if (currentPoints === "" || targetPoints === "" || pointsPerDollar === "" ||
+            currentPoints < 0 || targetPoints < 0 || pointsPerDollar <= 0 ||
+            isNaN(currentPoints) || isNaN(targetPoints) || isNaN(pointsPerDollar)) {
+            document.getElementById('result').innerHTML = "<p>Please enter valid numbers for all fields.</p>";
             return;
         }
 
@@ -78,18 +107,21 @@
         if (pointsNeeded <= 0) {
             document.getElementById('result').innerHTML = "<p>You already have enough points!</p>";
         } else {
-            let dollarsNeeded = pointsNeeded / 100;
+            let dollarsNeeded = pointsNeeded / pointsPerDollar;
 
             if (dollarsNeeded < 1) {
-                // Use Math.ceil to round up to the next whole dollar
-                dollarsNeeded = Math.ceil(dollarsNeeded);
-                document.getElementById('result').innerHTML = `<p>You need to spend $${dollarsNeeded} to reach your target of ${targetPoints} points.</p>`;
+                document.getElementById('result').innerHTML = `<p>Steam does not award points for purchases under $1.</p>`;
             } else {
                 // Use Math.ceil to round up to the next whole dollar
                 dollarsNeeded = Math.ceil(dollarsNeeded);
                 document.getElementById('result').innerHTML = `<p>You need to spend $${dollarsNeeded} to reach your target of ${targetPoints} points.</p>`;
             }
         }
+    }
+
+    function openHelp() {
+        const helpLink = "https://store.steampowered.com/points/howitworks"; // Replace with your actual link
+        window.open(helpLink, "_blank");
     }
 </script>
 
